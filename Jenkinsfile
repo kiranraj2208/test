@@ -1,5 +1,7 @@
 pipeline {
-  agent none
+  agent {
+    label 'default'
+  }
   stages {
     stage('Initialize') {
       steps {
