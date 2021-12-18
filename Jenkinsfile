@@ -1,11 +1,5 @@
 pipeline {
-  agent {
-    kubernetes {
-      defaultContainer 'jnlp'
-      yamlFile 'build-pod.yaml'
-    }
-
-  }
+  agent any
   stages {
     stage('Clone') {
       agent any
