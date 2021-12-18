@@ -2,12 +2,7 @@ pipeline {
   agent any
   stages {
     stage('Clone') {
-      agent {
-        docker {
-          image 'adoptopenjdk/maven-openjdk11'
-        }
-
-      }
+      agent any
       steps {
         git(url: 'https://github.com/kiranraj2208/test.git', branch: 'main')
       }
