@@ -2,7 +2,6 @@ pipeline {
   agent any
   stages {
     stage('Clone') {
-      agent any
       steps {
         git(url: 'https://github.com/kiranraj2208/test.git', branch: 'main')
       }
