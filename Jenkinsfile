@@ -1,15 +1,20 @@
 pipeline {
-  agent {
-    label 'maven'
-  }
+  agent any
   stages {
     stage('Initialize') {
+      agent any
       steps {
         echo 'Initliazing the project'
       }
     }
 
     stage('Clone') {
+      agent {
+        node {
+          label 'default'
+        }
+
+      }
       steps {
         git(url: 'https://github.com/kiranraj2208/test.git', branch: 'main')
       }
@@ -17,7 +22,10 @@ pipeline {
 
     stage('Build') {
       agent {
-        label 'maven'
+        node {
+          label 'maven'
+        }
+
       }
       steps {
         sh 'mvn clean compile'
