@@ -37,7 +37,7 @@ public class TestController {
     public Map<String, String> getLog() {
         Map<String, String> map = new HashMap<>();
         map.put(STATUS, "logs1");
-        map.put(MESSAGE, "you are in the new logging mood 8");
+        map.put(MESSAGE, "you are in the new logging mood 10");
         log.info("The logging count {}", random.nextInt(100));
         return map;
     }
