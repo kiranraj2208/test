@@ -1,35 +1,45 @@
-pipeline {
-  agent any
-  stages {
-    stage('Clone') {
-      steps {
-        git(url: 'https://github.com/kiranraj2208/test.git', branch: 'main')
-      }
-    }
+podTemplate(label: 'mypod', containers: [],volumes: []) {
+    node('mypod') {
+        stage('Initialize') {
 
-    stage('Build') {
-      agent {
-        docker {
-          image 'adoptopenjdk/maven-openjdk11'
+        }
+        stage('Clone repository') {
+            container('git') {
+                sh 'git clone -b main https://github.com/kiranraj2208/test.git'
+            }
+        }
+        stage('Build') {
+            container('maven') {
+                dir('test/') {
+                    sh 'mvn clean install'
+                }
+            }
         }
 
-      }
-      steps {
-        sh 'mvn clean compile'
-      }
-    }
 
-    stage('Test') {
-      agent {
-        docker {
-          image 'adoptopenjdk/maven-openjdk11'
+
+        stage('Check running containers') {
+            container('docker') {
+                // example to show you can run docker commands when you mount the socket
+                dir('test/') {
+                    sh 'echo "building docker image"'
+                    sh 'docker build -t test-image .'
+                }
+            }
         }
 
-      }
-      steps {
-        sh 'mvn test'
-      }
-    }
 
-  }
+
+        stage('Deploy to kubernetes') {
+            withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
+                    sh '/usr/bin/curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
+                    sh 'chmod u+x ./kubectl'
+                    sh 'echo "deploying the code to kubernetes"'
+                    sh './kubectl apply -f deploy/deployment.yml -n test'
+                    sh 'ls *'
+            }
+        }
+
+
+    }
 }
