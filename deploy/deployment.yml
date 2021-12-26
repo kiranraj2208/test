@@ -36,9 +36,9 @@ spec:
         - image: test-image
           imagePullPolicy: Never
           name: test
-          volumeMounts:
-            - mountPath: /elastic/apm/agent
-              name: elastic-apm-agent
+#          volumeMounts:
+#            - mountPath: /elastic/apm/agent
+#              name: elastic-apm-agent
           resources:
             limits:
               cpu: "200m"
