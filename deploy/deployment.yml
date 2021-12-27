@@ -41,7 +41,7 @@ spec:
 #              name: elastic-apm-agent
           resources:
             limits:
-              cpu: 500m
+              cpu: 1000m
               memory: 1000Mi
           readinessProbe:
             initialDelaySeconds: 1
