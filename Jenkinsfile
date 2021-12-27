@@ -18,7 +18,7 @@ podTemplate(label: 'mypod', containers: [],volumes: []) {
 
 
 
-        stage('Check running containers') {
+        stage('Build docker image') {
             container('docker') {
                 // example to show you can run docker commands when you mount the socket
                 dir('test/') {
@@ -36,6 +36,11 @@ podTemplate(label: 'mypod', containers: [],volumes: []) {
                     sh 'chmod u+x ./kubectl'
                     sh 'echo "deploying the code to kubernetes"'
                     sh './kubectl apply -f test/deploy/deployment.yml -n test'
+            }
+        }
+        stage('Start the service') {
+            withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
+                    sh './kubectl rollout restart deploy/test -n test'
             }
         }
 

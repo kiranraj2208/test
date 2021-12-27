@@ -21,7 +21,7 @@ public class TestController {
         map.put(STATUS, "success");
         map.put(MESSAGE, "you are in the test app");
         log.info("success log: {}", map);
-        String s = "^(?<time>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3})\\s+(?<level>[^\\s]+)\\s+(\\[(?<service>[^,]*),(?<trace>[^,]*),(?<span>[^,]*),(?<exportable>[^\\]]*)\\]\\s+)?(?<pid>\\d+)\\s+---\\s+\\[(?<thread>[^\\]]+)\\]\\s+(?<source>[^\\s]+)\\s*:\\s+(?<message>.*)";
+//        String s = "^(?<time>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3})\\s+(?<level>[^\\s]+)\\s+(\\[(?<service>[^,]*),(?<trace>[^,]*),(?<span>[^,]*),(?<exportable>[^\\]]*)\\]\\s+)?(?<pid>\\d+)\\s+---\\s+\\[(?<thread>[^\\]]+)\\]\\s+(?<source>[^\\s]+)\\s*:\\s+(?<message>.*)";
         return map;
     }
 
