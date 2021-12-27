@@ -1,7 +1,10 @@
 podTemplate(label: 'mypod', containers: [],volumes: []) {
     node('mypod') {
         stage('Initialize') {
-
+            withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
+                    sh '/usr/bin/curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
+                    sh 'chmod u+x ./kubectl'
+            }
         }
         stage('Clone repository') {
             container('git') {
@@ -32,8 +35,8 @@ podTemplate(label: 'mypod', containers: [],volumes: []) {
 
         stage('Deploy to kubernetes') {
             withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
-                    sh '/usr/bin/curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
-                    sh 'chmod u+x ./kubectl'
+                    // sh '/usr/bin/curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
+                    // sh 'chmod u+x ./kubectl'
                     sh 'echo "deploying the code to kubernetes"'
                     sh './kubectl apply -f test/deploy/deployment.yml -n test'
             }
