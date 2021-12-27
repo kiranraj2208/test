@@ -39,10 +39,10 @@ spec:
 #          volumeMounts:
 #            - mountPath: /elastic/apm/agent
 #              name: elastic-apm-agent
-          resources:
-            limits:
-              cpu: 200m
-              memory: 400Mi
+#          resources:
+#            limits:
+#              cpu: 200m
+#              memory: 400Mi
           readinessProbe:
             initialDelaySeconds: 1
             periodSeconds: 5
