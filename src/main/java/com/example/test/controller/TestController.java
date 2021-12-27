@@ -25,7 +25,7 @@ public class TestController {
     public Map<String, String> getResponse() {
         Map<String, String> map = new HashMap<>();
         map.put(STATUS, "success");
-        map.put(MESSAGE, "you are in the test app. This is the latest main version...");
+        map.put(MESSAGE, "you are in the test-dev app. This is the latest main version...");
         log.info("success log: {}", map);
 //        String s = "^(?<time>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3})\\s+(?<level>[^\\s]+)\\s+(\\[(?<service>[^,]*),(?<trace>[^,]*),(?<span>[^,]*),(?<exportable>[^\\]]*)\\]\\s+)?(?<pid>\\d+)\\s+---\\s+\\[(?<thread>[^\\]]+)\\]\\s+(?<source>[^\\s]+)\\s*:\\s+(?<message>.*)";
         return map;
