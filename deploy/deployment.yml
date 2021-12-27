@@ -34,7 +34,7 @@ spec:
       #       ]
       containers:
         - image: test-image
-          imagePullPolicy: Always
+          imagePullPolicy: Never
           name: test
 #          volumeMounts:
 #            - mountPath: /elastic/apm/agent
