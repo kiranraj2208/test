@@ -41,7 +41,7 @@ spec:
 #              name: elastic-apm-agent
           resources:
             limits:
-              cpu: "200m"
+              cpu: "400m"
               memory: "600Mi"
           readinessProbe:
             initialDelaySeconds: 1
@@ -51,7 +51,7 @@ spec:
             failureThreshold: 5
             httpGet:
               port: 8080
-              path: /log
+              path: /status
               scheme: HTTP
           env:
             - name: spring.application.name

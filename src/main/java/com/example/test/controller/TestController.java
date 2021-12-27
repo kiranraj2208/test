@@ -15,6 +15,12 @@ public class TestController {
     Random random = new Random();
     public static final String STATUS = "status";
     public static final String MESSAGE = "message";
+
+    @GetMapping("/status")
+    public String getStatus() {
+        return "Active";
+    }
+
     @GetMapping("/response")
     public Map<String, String> getResponse() {
         Map<String, String> map = new HashMap<>();
