@@ -2,6 +2,7 @@ package com.example.test.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,13 +35,12 @@ public class TestController {
     }
 
     @GetMapping("/errors")
-    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-    public Map<String, String> getErrorResponse() {
+    public ResponseEntity<Map<String, String>> getErrorResponse() {
         Map<String, String> map = new HashMap<>();
         map.put(STATUS, "error");
         map.put(MESSAGE, "you are out");
         log.error("error log: {}", map);
-        return map;
+        return ResponseEntity.status(random.nextInt(2) == 1 ? HttpStatus.OK : HttpStatus.SERVICE_UNAVAILABLE).body(map);
     }
     @GetMapping("/log")
     public Map<String, String> getLog() {
