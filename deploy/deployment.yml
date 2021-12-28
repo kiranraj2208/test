@@ -18,7 +18,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8888"
-        prometheus.io/path: /status
+        prometheus.io/path: /actuator/prometheus
     spec:
       volumes:
         - name: elastic-apm-agent
