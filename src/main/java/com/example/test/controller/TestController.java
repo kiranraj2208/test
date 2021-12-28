@@ -42,6 +42,16 @@ public class TestController {
         log.error("error log: {}", map);
         return ResponseEntity.status(random.nextInt(2) == 1 ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR).body(map);
     }
+
+    @GetMapping("/errors1")
+    public ResponseEntity<Map<String, String>> getErrorResponse1() {
+        Map<String, String> map = new HashMap<>();
+        map.put(STATUS, "error");
+        map.put(MESSAGE, "you are really out");
+        log.error("error log: {}", map);
+        return ResponseEntity.status(random.nextInt(2) == 1 ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR).body(map);
+    }
+
     @GetMapping("/log")
     public Map<String, String> getLog() {
         Map<String, String> map = new HashMap<>();
