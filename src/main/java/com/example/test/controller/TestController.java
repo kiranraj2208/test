@@ -40,7 +40,7 @@ public class TestController {
         map.put(STATUS, "error");
         map.put(MESSAGE, "you are out");
         log.error("error log: {}", map);
-        return ResponseEntity.status(random.nextInt(2) == 1 ? HttpStatus.OK : HttpStatus.SERVICE_UNAVAILABLE).body(map);
+        return ResponseEntity.status(random.nextInt(2) == 1 ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR).body(map);
     }
     @GetMapping("/log")
     public Map<String, String> getLog() {
