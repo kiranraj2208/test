@@ -34,7 +34,7 @@ public class TestController {
     }
 
     @GetMapping("/errors")
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public Map<String, String> getErrorResponse() {
         Map<String, String> map = new HashMap<>();
         map.put(STATUS, "error");
