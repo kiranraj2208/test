@@ -15,6 +15,10 @@ spec:
       labels:
         app: test
         fluentd-log-format: "spring-boot"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8888"
+        prometheus.io/path: /status
     spec:
       volumes:
         - name: elastic-apm-agent
