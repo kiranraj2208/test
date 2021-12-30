@@ -1,4 +1,4 @@
-podTemplate(label: 'mypod', containers: [],volumes: []) {
+podTemplate {
     node('mypod') {
         stage('Initialize') {
             withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
@@ -19,8 +19,26 @@ podTemplate(label: 'mypod', containers: [],volumes: []) {
             }
         }
 
-
-
+        stage('Sonarqube scan') {
+            container('maven') {
+                dir('test/'){
+                    withSonarQubeEnv('kube-sonarqube') {
+                        sh 'mvn clean verify sonar:sonar'
+                    }
+                }
+            }
+        }
+        stage("Quality gate") {
+            // check if sonarqube scan passes the qualityGate
+            timeout(time: 5, unit: 'MINUTES') {
+                def qualityGate = waitForQualityGate()
+                if(qualityGate.status != 'OK') {
+                    error "Quality gate failed with status: ${qualityGate.status}}"
+                } else {
+                    echo 'Quality gate passed'
+                }
+            }
+        }
         stage('Build docker image') {
             container('docker') {
                 // example to show you can run docker commands when you mount the socket
@@ -30,9 +48,6 @@ podTemplate(label: 'mypod', containers: [],volumes: []) {
                 }
             }
         }
-
-
-
         stage('Deploy to kubernetes') {
             withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
                     // sh '/usr/bin/curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
@@ -46,7 +61,5 @@ podTemplate(label: 'mypod', containers: [],volumes: []) {
                     sh './kubectl rollout restart deploy/test -n test'
             }
         }
-
-
     }
 }
