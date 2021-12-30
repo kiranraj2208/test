@@ -29,6 +29,7 @@ podTemplate {
             }
         }
         stage("Quality gate") {
+            // check if sonarqube scan passes the qualityGate
             timeout(time: 5, unit: 'MINUTES') {
                 def qualityGate = waitForQualityGate()
                 if(qualityGate.status != 'OK') {
