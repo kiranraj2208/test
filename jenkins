@@ -1,0 +1,49 @@
+podTemplate(label: 'mypod', containers: [
+    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
+  ],
+  volumes: [
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+  ]
+  ) {
+    node('mypod') {
+
+
+
+        // stage('Check running containers') {
+        //     container('docker') {
+        //         // example to show you can run docker commands when you mount the socket
+        //         sh 'ls /var/run'
+        //         sh 'hostname'
+        //         sh 'hostname -i'
+        //         sh 'docker ps'
+        //     }
+        // }
+
+        // stage('Clone repository') {
+        //     container('git') {
+        //         sh 'whoami'
+        //         sh 'git clone -b master https://github.com/lvthillo/hello-world-war.git'
+        //     }
+        // }
+
+        stage('List pods in jenkins') {
+            withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
+                sh '/usr/bin/curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
+                sh 'chmod u+x ./kubectl'
+                // sh 'ls /usr/local/bin/'
+                // sh 'ls /usr/bin/'
+                sh "ls"
+                // sh '/usr/bin/curl'
+                sh './kubectl get pods -n jenkins'
+            }
+        }
+
+        // stage('Maven Build') {
+        //     container('maven') {
+        //         dir('hello-world-war/') {
+        //             sh 'echo "in the maven"'
+        //         }
+        //     }
+        // }
+    }
+}
