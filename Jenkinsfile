@@ -64,7 +64,7 @@ podTemplate {
         stage('Authorize deployment') {
             input(message: 'Continue deployment to prod', id: 'DEPLOY_TO_PROD', ok: 'yes, go head')
         }
-        stage('Start the service') {
+        stage('Deploy to production') {
             withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
                 sh 'echo "deploying the code to kubernetes - Production"'
                 sh './kubectl apply -f test/deploy/deployment.yml -n production'
