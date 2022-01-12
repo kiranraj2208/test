@@ -1,5 +1,5 @@
 podTemplate {
-    node('mypod') {
+    node('spring') {
         stage('Initialize') {
             withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
                     sh '/usr/bin/curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
@@ -23,7 +23,7 @@ podTemplate {
             container('maven') {
                 dir('test/'){
                     withSonarQubeEnv('kube-sonarqube') {
-                        sh 'mvn clean verify sonar:sonar'
+                        sh 'mvn sonar:sonar'
                     }
                 }
             }
@@ -48,7 +48,7 @@ podTemplate {
                 }
             }
         }
-        stage('Deploy to kubernetes') {
+        stage('Deploy to dev') {
             withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
                     // sh '/usr/bin/curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
                     // sh 'chmod u+x ./kubectl'
