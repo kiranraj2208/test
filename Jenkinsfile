@@ -1,5 +1,9 @@
 podTemplate {
     node('spring') {
+        stage('Automation testing') {
+                sh 'npm install -g newman'
+                sh 'newman run test/postman/test.postman_collection.json --env-var test_url=http://test.test.svc.cluster.local:80'
+            }
         stage('Initialize') {
             withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
                     sh '/usr/bin/curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
@@ -61,6 +65,7 @@ podTemplate {
                     sh './kubectl rollout restart deploy/test -n test'
             }
         }
+
         stage('Authorize deployment') {
             input(message: 'Continue deployment to prod', id: 'DEPLOY_TO_PROD', ok: 'yes, go head')
         }
