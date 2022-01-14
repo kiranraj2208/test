@@ -67,19 +67,15 @@ podTemplate {
             }
         }
         stage('Automation testing') {
-            parallel {
-                stage("test suite 1"){
-                    container ('node'){
-                        sh 'newman run test/postman/test.postman_collection.json --env-var test_url=http://test.test.svc.cluster.local:80'
+            parallel "test suite 1" : {
+                        container ('node'){
+                            sh 'newman run test/postman/test.postman_collection.json --env-var test_url=http://test.test.svc.cluster.local:80'
+                        }
+                    }, "test suite 2": {
+                        container ('node'){
+                            sh 'newman run test/postman/test.postman_collection2.json --env-var test_url=http://test.test.svc.cluster.local:80'
+                        }
                     }
-                }
-                stage("test suite 2"){
-                    container ('node'){
-                        sh 'newman run test/postman/test.postman_collection2.json --env-var test_url=http://test.test.svc.cluster.local:80'
-                    }
-                }
-            }
-
         }
         stage('Authorize deployment') {
             input(message: 'Continue deployment to prod', id: 'DEPLOY_TO_PROD', ok: 'yes, go head')
