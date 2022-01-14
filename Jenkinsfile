@@ -1,9 +1,10 @@
 podTemplate {
     node('spring') {
         stage('Automation testing') {
-                sh 'sleep 10000'
-                sh 'npm install -g newman'
-                sh 'newman run test/postman/test.postman_collection.json --env-var test_url=http://test.test.svc.cluster.local:80'
+            container ('node'){
+                    sh 'npm install -g newman'
+                    sh 'newman run test/postman/test.postman_collection.json --env-var test_url=http://test.test.svc.cluster.local:80'
+                }
             }
         stage('Initialize') {
             withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
