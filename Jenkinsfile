@@ -1,11 +1,5 @@
 podTemplate {
     node('spring') {
-        stage('Automation testing') {
-            container ('node'){
-                    sh 'npm install -g newman'
-                    sh 'newman run test/postman/test.postman_collection.json --env-var test_url=http://test.test.svc.cluster.local:80'
-                }
-            }
         stage('Initialize') {
             withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
                     sh '/usr/bin/curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
@@ -15,6 +9,12 @@ podTemplate {
         stage('Clone repository') {
             container('git') {
                 sh 'git clone -b main https://github.com/kiranraj2208/test.git'
+            }
+        }
+        stage('Automation testing') {
+            container ('node'){
+                sh 'npm install -g newman'
+                sh 'newman run test/postman/test.postman_collection.json --env-var test_url=http://test.test.svc.cluster.local:80'
             }
         }
         stage('Build') {
