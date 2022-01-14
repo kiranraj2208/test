@@ -11,12 +11,6 @@ podTemplate {
                 sh 'git clone -b main https://github.com/kiranraj2208/test.git'
             }
         }
-        stage('Automation testing') {
-            container ('node'){
-                sh 'npm install -g newman'
-                sh 'newman run test/postman/test.postman_collection.json --env-var test_url=http://test.test.svc.cluster.local:80'
-            }
-        }
         stage('Build') {
             container('maven') {
                 dir('test/') {
@@ -67,7 +61,12 @@ podTemplate {
                     sh './kubectl rollout restart deploy/test -n test'
             }
         }
-
+        stage('Automation testing') {
+            container ('node'){
+                sh 'npm install -g newman'
+                sh 'newman run test/postman/test.postman_collection.json --env-var test_url=http://test.test.svc.cluster.local:80'
+            }
+        }
         stage('Authorize deployment') {
             input(message: 'Continue deployment to prod', id: 'DEPLOY_TO_PROD', ok: 'yes, go head')
         }
