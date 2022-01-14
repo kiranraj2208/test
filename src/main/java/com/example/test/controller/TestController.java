@@ -27,10 +27,9 @@ public class TestController {
     @GetMapping("/response")
     public Map<String, String> getResponse() {
         Map<String, String> map = new HashMap<>();
-        map.put(STATUS, "success");
+        map.put(STATUS, "success3");
         map.put(MESSAGE, "you are in the test-main app. This is the latest main version...");
         log.info("success log: {}", map);
-//        String s = "^(?<time>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3})\\s+(?<level>[^\\s]+)\\s+(\\[(?<service>[^,]*),(?<trace>[^,]*),(?<span>[^,]*),(?<exportable>[^\\]]*)\\]\\s+)?(?<pid>\\d+)\\s+---\\s+\\[(?<thread>[^\\]]+)\\]\\s+(?<source>[^\\s]+)\\s*:\\s+(?<message>.*)";
         return map;
     }
 
@@ -47,7 +46,7 @@ public class TestController {
     public ResponseEntity<Map<String, String>> getErrorResponse1() {
         Map<String, String> map = new HashMap<>();
         map.put(STATUS, "error");
-        map.put(MESSAGE, "you are really out");
+        map.put(MESSAGE, "you are really out.");
         log.error("error log: {}", map);
         return ResponseEntity.status(random.nextInt(2) == 1 ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR).body(map);
     }
@@ -56,7 +55,7 @@ public class TestController {
     public Map<String, String> getLog() {
         Map<String, String> map = new HashMap<>();
         map.put(STATUS, "logs1");
-        map.put(MESSAGE, "you are in the new logging mood 10");
+        map.put(MESSAGE, "you are in the new logging mood 11");
         log.info("The logging count {}", random.nextInt(100));
         return map;
     }
