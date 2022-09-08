@@ -23,12 +23,17 @@ spec:
       volumes:
         - name: elastic-apm-agent
           emptyDir: {}
+        - name: host-m2
+          hostPath:
+            path: /Users/kiranraj/.m2
       initContainers:
         - name: elastic-java-agent
-          image: docker.elastic.co/observability/apm-agent-java:1.12.0
+          image: docker.elastic.co/observability/apm-agent-java:latest
           volumeMounts:
             - mountPath: /elastic/apm/agent
               name: elastic-apm-agent
+            - mountPath: /root/.m2
+              name: host-m2
           command:
             [
               "cp",
@@ -37,16 +42,16 @@ spec:
               "/elastic/apm/agent",
             ]
       containers:
-        - image: test-image
+        - image: test
           imagePullPolicy: Never
           name: test
+          resources:
+            limits:
+              cpu: 200m
+              memory: 600Mi
           volumeMounts:
             - mountPath: /elastic/apm/agent
               name: elastic-apm-agent
-#          resources:
-#            limits:
-#              cpu: 200m
-#              memory: 400Mi
           readinessProbe:
             initialDelaySeconds: 1
             periodSeconds: 5

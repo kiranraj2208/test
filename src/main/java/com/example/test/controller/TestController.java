@@ -1,13 +1,19 @@
 package com.example.test.controller;
 
+import com.example.test.annotation.LogMetric;
+import com.example.test.model.Operation;
+import com.example.test.model.Product;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -18,9 +24,28 @@ public class TestController {
     Random random = new Random();
     public static final String STATUS = "status";
     public static final String MESSAGE = "message";
+    final Operation operation;
+
+    public TestController(Operation operation) {
+        this.operation = operation;
+    }
+
+    @GetMapping("/get")
+    public void get() throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+        String s = restTemplate.getForObject("http://localhost:3000/get", String.class);
+        Product product = new ObjectMapper().readValue(s, Product.class);
+        LinkedHashMap<String, Object> l = (LinkedHashMap<String, Object>) product.getDetails("result").get("inside");
+        log.info("{}", ((LinkedHashMap<String, Object>) l.get("522")).get("name"));
+        log.info(s);
+    }
 
     @GetMapping("/status")
     public String getStatus() {
+        log.info("from k: {}", operation.k());
+        operation.m();
+        operation.msg();
+        logMetrics();
         return "Active";
     }
 
@@ -58,5 +83,10 @@ public class TestController {
         map.put(MESSAGE, "you are in the new logging mood 11");
         log.info("The logging count {}", random.nextInt(100));
         return map;
+    }
+
+    @LogMetric
+    public void logMetrics() {
+        System.out.println("In the log metrics function");
     }
 }

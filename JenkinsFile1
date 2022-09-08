@@ -1,27 +1,4 @@
-podTemplate(yaml: '''
-    apiVersion: v1
-    kind: Pod
-    spec:
-      containers:
-      - name: maven
-        image: maven:3.8.1-jdk-8
-        command:
-        - sleep
-        args:
-        - 99d
-      - name: git
-        image: alpine/git
-        command:
-        - sleep
-        args:
-        - 99d
-      - name: node
-        image: node:latest
-        command:
-        - sleep
-        args:
-        - 99d
-''') {
+podTemplate {
     node('spring') {
         stage('Initialize') {
             withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.default']){
@@ -51,17 +28,17 @@ podTemplate(yaml: '''
                 }
             }
         }
-        // stage("Quality gate") {
-        //     // check if sonarqube scan passes the qualityGate
-        //     timeout(time: 5, unit: 'MINUTES') {
-        //         def qualityGate = waitForQualityGate()
-        //         if(qualityGate.status != 'OK') {
-        //             error "Quality gate failed with status: ${qualityGate.status}}"
-        //         } else {
-        //             echo 'Quality gate passed'
-        //         }
-        //     }
-        // }
+        stage("Quality gate") {
+            // check if sonarqube scan passes the qualityGate
+            timeout(time: 5, unit: 'MINUTES') {
+                def qualityGate = waitForQualityGate()
+                if(qualityGate.status != 'OK') {
+                    error "Quality gate failed with status: ${qualityGate.status}}"
+                } else {
+                    echo 'Quality gate passed'
+                }
+            }
+        }
         stage('Build docker image') {
             container('docker') {
                 // example to show you can run docker commands when you mount the socket
